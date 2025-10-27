@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  forecasting-api:
+    build:
+      context: ./services/forecastingApi
+      dockerfile: Dockerfile.dev
+    container_name: forecasting-api-dev
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - LOG_LEVEL=DEBUG
+      - MODEL_UPDATE_SCHEDULE=daily
+      - FORECAST_SCHEDULE=manual
+      - CUSTOMER_ID=${CUSTOMER_ID:-test}
+      - AWS_REGION=${AWS_REGION:-af-south-1}
+      - INPUT_BUCKET=${INPUT_BUCKET:-sa-api-client-input}
+      - OUTPUT_BUCKET=${OUTPUT_BUCKET:-sa-api-client-output}
+    volumes:
+      - ./services/forecastingApi:/app
+      - ./data/models:/app/models
+      - ./data/cache:/app/cache
+      - ./logs:/app/logs
+    depends_on:
+      - redis
+    networks:
+      - platform-edge
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis-dev
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data-dev:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    networks:
+      - platform-edge
+
+  model-updater:
+    build:
+      context: ./services/model-updater
+      dockerfile: Dockerfile.dev
+    container_name: model-updater-dev
+    restart: unless-stopped
+    environment:
+      - AWS_REGION=${AWS_REGION:-af-south-1}
+      - OUTPUT_BUCKET=${OUTPUT_BUCKET:-sa-api-client-output}
+      - UPDATE_SCHEDULE=manual
+    volumes:
+      - ./services/model-updater:/app
+      - ./data/models:/app/models
+      - ./logs:/app/logs
+    networks:
+      - platform-edge
+
+volumes:
+  redis-data-dev:
+
+networks:
+  platform-edge:
+    driver: bridge

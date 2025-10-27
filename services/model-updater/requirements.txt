@@ -1,0 +1,22 @@
+# Model Updater Service Dependencies
+# Optimized for ARM64 edge devices
+
+# Web framework
+flask==2.3.3
+
+# AWS SDK
+boto3==1.28.57
+botocore==1.31.57
+
+# Caching
+redis==4.6.0
+
+# Scheduling
+schedule==1.2.0
+
+# Utilities
+requests==2.31.0
+python-dateutil==2.8.2
+
+# Logging
+python-json-logger==2.0.7
