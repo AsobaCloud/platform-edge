@@ -4,14 +4,14 @@ Edge deployment platform for ONA Platform services, optimized for ARM64 devices 
 
 ## Overview
 
-This repository contains edge-optimized versions of ONA Platform services, designed to run on resource-constrained devices with ARM64 architecture. The primary focus is on deploying the forecasting API service for local inference.
+This repository contains edge-optimized versions of ONA Platform services, designed to run on resource-constrained devices with ARM64 architecture. It deploys forecasting and edge-device-registry services for local inference and edge operations.
 
 ## Architecture
 
 - **Target Devices**: Raspberry Pi CM4, Orange Pi 5, Rock 5B, and similar ARM64 SBCs
 - **OS Support**: Raspberry Pi OS, Ubuntu ARM64, Debian ARM64
 - **Container Runtime**: Docker with ARM64 support
-- **Services**: forecastingApi (primary), with extensibility for other services
+- **Services**: forecastingApi, edge-device-registry, model-updater
 
 ## Key Features
 
@@ -54,6 +54,11 @@ docker-compose ps
 2. Update configuration variables
 3. Restart services: `docker-compose restart`
 
+Edge-device-registry auth rollout variables:
+- `EDGE_DEVICE_REGISTRY_AUTH_MODE=monitor` (default)
+- `EDGE_DEVICE_REGISTRY_API_KEY=<value from SSM parameter /ona-platform/prod/edge-device-registry/api-key>`
+- Optional: `EDGE_DEVICE_REGISTRY_ALLOWED_API_KEYS` (comma-separated)
+
 ## Services
 
 ### forecastingApi
@@ -70,6 +75,16 @@ Edge-optimized forecasting service for solar energy prediction.
 - `GET /health` - Health check
 - `POST /forecast` - Generate forecast
 - `GET /status` - Service status
+
+### edge-device-registry
+
+Edge device discovery and lifecycle management service.
+
+**Endpoints:**
+- `GET /health` - Health check
+- `GET /api/devices` - List devices
+- `POST /api/devices` - Register/discover device
+- `GET /api/devices/{device_id}` - Device details
 
 ## Development
 
@@ -115,6 +130,9 @@ make build
 # Deploy to edge device
 ./scripts/deploy.sh
 
+# Run auth monitor canary for edge-device-registry
+./scripts/canary-edge-registry-auth.sh
+
 # Update models
 ./scripts/update-models.sh
 
@@ -143,6 +161,7 @@ make build
 ```bash
 # View service logs
 docker-compose logs -f forecasting-api
+docker-compose logs -f edge-device-registry
 
 # View all logs
 docker-compose logs -f

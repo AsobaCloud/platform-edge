@@ -1,6 +1,25 @@
 version: '3.8'
 
 services:
+  edge-device-registry:
+    build:
+      context: ./services/edge-device-registry
+      dockerfile: Dockerfile
+    container_name: edge-device-registry-dev
+    restart: unless-stopped
+    ports:
+      - "8082:8082"
+    environment:
+      - AWS_REGION=${AWS_REGION:-af-south-1}
+      - EDGE_DEVICE_REGISTRY_AUTH_MODE=${EDGE_DEVICE_REGISTRY_AUTH_MODE:-monitor}
+      - EDGE_DEVICE_REGISTRY_API_KEY=${EDGE_DEVICE_REGISTRY_API_KEY:-}
+      - EDGE_DEVICE_REGISTRY_ALLOWED_API_KEYS=${EDGE_DEVICE_REGISTRY_ALLOWED_API_KEYS:-}
+    volumes:
+      - ./services/edge-device-registry:/app
+      - ./data/edge-device-registry:/app/data
+    networks:
+      - platform-edge
+
   forecasting-api:
     build:
       context: ./services/forecastingApi

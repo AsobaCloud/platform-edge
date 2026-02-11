@@ -99,6 +99,10 @@ create_directories() {
 # Build services
 build_services() {
     log_info "Building services..."
+
+    # Build edge device registry
+    log_info "Building edge device registry..."
+    docker build -t edge-device-registry:latest services/edge-device-registry/
     
     # Build forecasting API
     log_info "Building forecasting API..."
@@ -155,6 +159,14 @@ wait_for_services() {
 # Run health checks
 run_health_checks() {
     log_info "Running health checks..."
+
+    # Check edge device registry
+    if curl -f http://localhost:8082/health > /dev/null 2>&1; then
+        log_info "✓ Edge Device Registry: Healthy"
+    else
+        log_error "✗ Edge Device Registry: Unhealthy"
+        return 1
+    fi
     
     # Check forecasting API
     if curl -f http://localhost:8080/health > /dev/null 2>&1; then
@@ -196,6 +208,8 @@ show_status() {
     log_info "Available endpoints:"
     echo "  - Health Check: http://localhost/health"
     echo "  - Service Status: http://localhost/status"
+    echo "  - Edge Device Registry API: http://localhost:8082/api/devices"
+    echo "  - Edge Device Registry via Nginx: http://localhost/api/devices"
     echo "  - Forecast API: http://localhost/api/forecast"
     echo "  - Model Updater: http://localhost/api/model/health"
     echo ""

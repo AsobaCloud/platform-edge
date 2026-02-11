@@ -10,7 +10,7 @@
     const EdgeDeviceRegistry = {
         devices: new Map(),
         discoveryInProgress: false,
-        apiBaseUrl: 'http://localhost:8082/api', // Backend API URL
+        apiBaseUrl: '/api', // Backend API URL
         
         /**
          * Initialize the device registry

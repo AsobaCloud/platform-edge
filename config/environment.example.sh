@@ -24,6 +24,13 @@ export MODELS_DIR="/app/models"
 export CACHE_DIR="/app/cache"
 export LOGS_DIR="/app/logs"
 
+# Edge Device Registry Security (monitor mode by default)
+export EDGE_DEVICE_REGISTRY_AUTH_MODE="monitor"  # monitor | enforce
+# Set from SSM parameter /ona-platform/prod/edge-device-registry/api-key
+export EDGE_DEVICE_REGISTRY_API_KEY=""
+# Optional comma-separated additional keys
+export EDGE_DEVICE_REGISTRY_ALLOWED_API_KEYS=""
+
 # Performance Tuning (ARM64)
 export TF_CPP_MIN_LOG_LEVEL="2"
 export OMP_NUM_THREADS="4"
