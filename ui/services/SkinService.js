@@ -162,3 +162,11 @@ class SkinService {
 
 // Create global instance
 window.skinService = new SkinService();
+
+// Auto-initialize skin from localStorage on page load
+// Pages that call init() with user data will override this
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.skinService && !window.skinService.currentSkin) {
+        window.skinService.init();
+    }
+});
