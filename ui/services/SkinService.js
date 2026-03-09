@@ -65,6 +65,29 @@ class SkinService {
         document.head.appendChild(link);
         this.skinLinkElement = link;
 
+        // Swap logo for skin-specific version
+        const brandingImgs = document.querySelectorAll('.branding img');
+        brandingImgs.forEach(img => {
+            // Save original src for revert
+            if (!img.getAttribute('data-original-src')) {
+                img.setAttribute('data-original-src', img.getAttribute('src'));
+            }
+            const originalSrc = img.getAttribute('data-original-src');
+
+            if (skinId === 'default') {
+                // Restore original logo
+                img.src = originalSrc;
+                img.onerror = null;
+            } else {
+                img.src = `includes/skins/${skinId}-logo.png`;
+                img.onerror = () => {
+                    console.warn(`Skin logo not found: includes/skins/${skinId}-logo.png, using default logo`);
+                    img.src = originalSrc;
+                    img.onerror = null;
+                };
+            }
+        });
+
         // Apply branding text
         this.applyBranding(brandTitle);
     }
@@ -99,10 +122,14 @@ class SkinService {
                 if (!element.getAttribute('data-original-text')) {
                     element.setAttribute('data-original-text', originalText);
                 }
-                
-                // Replace "Ona Energy Management" with brand title
-                if (originalText.includes('Ona Energy Management')) {
-                    element.textContent = originalText.replace(/Ona Energy Management/g, brandTitle);
+
+                // Branding selectors always get the brand title set directly
+                // (these are branding elements by definition)
+                if (brandTitle === 'Ona Energy Management') {
+                    // Revert to original text
+                    element.textContent = element.getAttribute('data-original-text');
+                } else {
+                    element.textContent = brandTitle;
                 }
             });
         });
