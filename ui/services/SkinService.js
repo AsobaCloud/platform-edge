@@ -14,8 +14,10 @@ class SkinService {
      * Initialize skin from user data or localStorage
      */
     init(skinData) {
-        if (skinData && skinData.skin_id) {
-            this.loadSkin(skinData.skin_id, skinData.brand_title || skinData.skin_name);
+        if (skinData && (skinData.skin_id || skinData.skin_name)) {
+            // Use skin_name for CSS (filename convention), fall back to skin_id
+            const cssName = skinData.skin_name || skinData.skin_id;
+            this.loadSkin(cssName, skinData.brand_title || skinData.skin_name);
         } else {
             // Try to get from localStorage (from previous session)
             const savedSkin = localStorage.getItem('current_skin');
