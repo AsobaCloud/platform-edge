@@ -29,7 +29,7 @@ window.GLOBAL_TRAINING_API_TOKEN = window.GLOBAL_TRAINING_API_TOKEN || 'Zgyf4uvC
 // Zorora Deep Research API Endpoint
 // This is the Flask API server for the Zorora deep research engine
 // Default: local development server. Update for production deployment.
-window.ZORORA_API_ENDPOINT = window.ZORORA_API_ENDPOINT || 'http://localhost:5000';
+window.ZORORA_API_ENDPOINT = window.ZORORA_API_ENDPOINT || 'http://13.245.236.237:5000';
 
 // EnergyAnalyst RAG API Endpoint (Nehanda/EnergyAnalyst service)
 // Production: Railway. Development: localhost:8000
