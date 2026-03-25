@@ -24,7 +24,7 @@ window.DATA_ADMIN_API_ENDPOINT = window.DATA_ADMIN_API_ENDPOINT || 'https://pj1u
 // This is a service-to-service authentication token for the training/metrics/comparison APIs
 // To find this value, run:
 //   aws ssm get-parameter --name "/ona-platform/prod/global-training-api-token" --with-decryption --region af-south-1 --query 'Parameter.Value' --output text
-window.GLOBAL_TRAINING_API_TOKEN = window.GLOBAL_TRAINING_API_TOKEN || 'Zgyf4uvCX7V0/frwcSqkjfOgxYPSyYkgYt2IvjEPCA0=';
+window.GLOBAL_TRAINING_API_TOKEN = window.GLOBAL_TRAINING_API_TOKEN || '';
 
 // Zorora Deep Research API Endpoint
 // This is the Flask API server for the Zorora deep research engine
@@ -40,4 +40,6 @@ window.ENERGY_ANALYST_API_ENDPOINT = window.ENERGY_ANALYST_API_ENDPOINT || 'http
 window.ENERGY_ANALYST_API_TOKEN = window.ENERGY_ANALYST_API_TOKEN || '';
 
 // Crossmint API Key for Treasury App
-window.CROSSMINT_API_KEY = window.CROSSMINT_API_KEY || 'sk_production_AGSbyLs6uaQJ5BN5iUy3cumWtc2VPPSQQSWw8fL4x8atNnZyK6DWKKboxh4mujEeh3YThuq1f89fgYuL7NZCpyiXfFMLrC2F9atMiMq3V4H4gY6xQmAymfw2weCBdgBa71uGWqRccXX2bxxa2f4pPNDKDxe9JM9dx73EYZSgVmsXvpAuH6Et3B2vQAJjUmNr4KhjV5y4QM8GVBw6E5nfFx73';
+// To find this value, run:
+//   aws ssm get-parameter --name "/ona-platform/prod/crossmint-api-key" --with-decryption --region af-south-1 --query 'Parameter.Value' --output text
+window.CROSSMINT_API_KEY = window.CROSSMINT_API_KEY || '';
